@@ -1,0 +1,64 @@
+\usepackage{lipsum}
+
+\title{Example Slides}
+\subtitle{Crazyness Distilled}
+\author[Thomas Wood]{Thomas Wood \\ \url{https://github.com/edgemaster/beamer-lecture-notes}}
+\institute{}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+  \maketitle
+\end{frame}
+
+%% Table of contents
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+\section{Introduction}
+\begin{frame}{Course Structure}
+  \begin{itemize}
+    \item Foo
+    \item Bar
+    \item Baz
+  \end{itemize}
+\end{frame}
+\lipsum[1]   %% Sample text generator
+
+
+%% theorem/proof/lemma/corollary/example blocks
+\section{Prime Numbers}
+\subsection{Definition}
+\begin{frame}{What Are Prime Numbers?}
+  \begin{definition}
+    A \alert{prime number} is a number that has exactly two divisors.
+  \end{definition}
+  \begin{example}
+    \begin{itemize}
+      \item 2 is prime (two divisors: 1 and 2).
+      \item 3 is prime (two divisors: 1 and 3).
+      \item 4 is not prime (\alert{three} divisors: 1, 2, and 4).
+    \end{itemize}
+  \end{example}
+\end{frame}
+
+\section{More sections}
+%% Columns
+\section{Future}
+\begin{frame}
+  \frametitle{What’s Still To Do?}
+  \begin{columns}
+    \column{.5\textwidth}
+      \begin{block}{Answered Questions}
+        How many primes are there?
+      \end{block}
+    \column{.5\textwidth}
+      \begin{block}{Open Questions}
+        Is every even number the sum of two primes?
+      \end{block}
+  \end{columns}
+\end{frame}
+
+\end{document}

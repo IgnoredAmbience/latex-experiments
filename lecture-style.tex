@@ -1,0 +1,72 @@
+\mode<article>{
+  \usepackage{hyperref}
+  \usepackage{verbatim}
+  \usepackage{float}
+  \usepackage{fullpage}
+}
+
+
+% For more options, see http://www.hartwork.org/beamer-theme-matrix/
+\usetheme[secheader]{Madrid}
+\usecolortheme{seahorse}
+
+\setbeamertemplate{navigation symbols}{}
+
+\mode<presentation>{
+  % Label every frame (starting at 0, sigh)
+  \let\oldframe\frame
+  \def\frame{\label{frame-\insertframenumber}\oldframe}
+
+%  \let\frame*=\frame
+%  \let\endframe*=\endframe
+}
+
+\mode<article>{
+  \reversemarginpar
+  \addtolength{\marginparwidth}{-1.5em}
+  \addtolength{\marginparsep}{-2em}
+
+  \newcommand{\stepslide}{%
+      \edef\lastfn{\insertframenumber}%
+      \stepcounter{framenumber}%
+      % \leavevmode prevents the slide being written on a newline beneath label
+      \leavevmode\marginpar{\sffamily\large\vspace{-0.3375\textwidth}Slide \insertframenumber}%
+    }
+
+  \makeatletter
+  \def\slideexists#1{\ifcsname beamer@slideframe-#1\endcsname\else\errmessage{Please rebuild \jobnamebeamerversion.tex before the article version}\fi}
+  \makeatother
+
+  \newcommand{\typesetframe}[1]{%
+    \begin{center}%
+      \stepslide%
+      \fbox{\includeslide[width=0.9\textwidth]{#1}}%
+    \end{center}%
+  }
+
+  \renewenvironment{frame}{%
+    \slideexists{\insertframenumber}%
+    \typesetframe{frame-\lastfn}%
+    \comment%
+  }{
+    \endcomment
+  }
+
+  % \againframe<n> will include the frame with slide n, does not yet work for more complex overlay specifications
+  \def\againframe<#1>#2{\typesetframe{#2<#1>}}
+
+  % \newpagestyle{blah}{
+  % {\blue Modular Reasoning about Programs: Separation Logic, 2014\hfil\arabic{pages}}}{}
+  % \pagestyle{blah}
+}
+
+
+
+\newcommand{\rulebox}[2]{\smallskip\noindent%
+\fbox{\begin{minipage}{\textwidth}
+   \begin{center}
+     \textbf{#1}
+   \end{center}
+   {#2}
+\end{minipage}}
+\smallskip}
