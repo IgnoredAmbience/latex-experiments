@@ -27,11 +27,15 @@
   \addtolength{\marginparsep}{-2em}
 
   \newcommand{\stepslide}{%
-      \edef\lastfn{\insertframenumber}%
-      \stepcounter{framenumber}%
-      % \leavevmode prevents the slide being written on a newline beneath label
-      \leavevmode\marginpar{\sffamily\large\vspace{-0.3375\textwidth}Slide \insertframenumber}%
-    }
+    \edef\lastfn{\insertframenumber}%
+    \stepcounter{framenumber}%
+  }
+
+  \newcommand{\printslidenumber}[1]{
+    % \leavevmode prevents the slide being written on a newline beneath label
+    \leavevmode\marginpar{\sffamily\large\vspace{-0.3375\textwidth}Slide #1}%
+  }
+
 
   \makeatletter
   \def\slideexists#1{\ifcsname beamer@slideframe-#1\endcsname\else\errmessage{Please rebuild \jobnamebeamerversion.tex before the article version}\fi}
@@ -40,6 +44,14 @@
   \newcommand{\typesetframe}[1]{%
     \begin{center}%
       \stepslide%
+      \printslidenumber{\insertframenumber}%
+      \fbox{\includeslide[width=0.9\textwidth]{#1}}%
+    \end{center}%
+  }
+
+  \newcommand{\hacktypesetframe}[2]{%
+    \begin{center}%
+      \printslidenumber{#2}%
       \fbox{\includeslide[width=0.9\textwidth]{#1}}%
     \end{center}%
   }
