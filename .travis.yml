@@ -13,6 +13,7 @@ install:
   - mkdir bin
   - wget http://mirrors.ctan.org/support/latexmk/latexmk.pl
   - mv latexmk.pl bin/latexmk
+  - chmod a+x bin/latexmk
   - export PATH=$PWD/bin:$PATH
 
 env:
