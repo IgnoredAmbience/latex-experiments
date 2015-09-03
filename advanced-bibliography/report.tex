@@ -1,0 +1,27 @@
+\documentclass[a4paper]{article}
+
+% For External Citations
+\usepackage{xcite}
+\externalcitedocument{publications}
+
+% For placeholder text
+\usepackage[nopar]{lipsum}
+
+\title{Some Report}
+\author{Some Person}
+
+\begin{document}
+\maketitle
+
+\lipsum[1]~\cite{GMP81,DBLP:journals/entcs/CardelliGG07,Tot97}
+
+\lipsum[2]~\cite{DBLP:conf/aplas/CalcagnoDG07,DBLP:journals/tcs/Gardner99}
+
+This citation~\cite{DBLP:conf/csl/BarberGHP97} is not the same as this citation~\cite{GMP81}.
+
+\bibliographystyle{alpha}
+\bibliography{sample}
+
+\end{document}
+
+
