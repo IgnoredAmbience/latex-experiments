@@ -1,9 +1,19 @@
 language: c
 
-before_install:
-  - sudo apt-add-repository -y ppa:grand-edgemaster/latex-backport
-  - sudo apt-get update -qq
-  - sudo apt-get install -y latexmk latex-beamer texlive-latex-recommended texlive-latex-extra
+sudo: false
+
+addons:
+  apt:
+    packages:
+      - texlive-latex-recommended
+      - texlive-latex-extra
+      - latex-beamer
+
+install:
+  - mkdir bin
+  - wget http://mirrors.ctan.org/support/latexmk/latexmk.pl
+  - mv latexmk.pl bin/latexmk
+  - export PATH=$PWD/bin:$PATH
 
 env:
   - SUBDIR=beamer-lecture-notes
