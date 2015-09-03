@@ -1,5 +1,5 @@
 \documentclass[a4paper]{article}
-\usepackage[nopar]{lipsum}
+\usepackage{bibtopic}
 
 \title{Publications}
 \author{Some Person}
@@ -7,8 +7,21 @@
 \begin{document}
 \maketitle
 
-\nocite{*}
 \bibliographystyle{plain}
-\bibliography{pg}
+
+\begin{btSect}{pg-article}
+  \section{Articles}
+  \btPrintAll
+\end{btSect}
+
+\begin{btSect}{pg-proceedings}
+  \section{Conference Papers}
+  \btPrintAll
+\end{btSect}
+
+\begin{btSect}{pg-editor}
+  \section{Editor}
+  \btPrintAll
+\end{btSect}
 
 \end{document}
