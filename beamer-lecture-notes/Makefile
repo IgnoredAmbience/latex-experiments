@@ -10,11 +10,13 @@ all: $(DIRS) $(LECPDF)
 %.pdf: %.tex
 	$(LATEXMK) $(LATEXMKFLAGS) -pdf $<
 
-$(LECPDF): example.tex lecture-style.tex        # Add other dependencies of example.tex here
+$(LECPDF): example.tex beamer-inline.sty  # Add other dependencies of example.tex here
 example.article.pdf: example.slides.pdf   # Slides inserted into article version are extracted from the pdf
 
 clean: $(CLEANDIRS)
 	$(LATEXMK) $(LATEXMKFLAGS) -C $(LECTEX)
+	$(RM) *.snm
+	$(RM) *.nav
 
 .PHONY: all
 .PHONY: clean
