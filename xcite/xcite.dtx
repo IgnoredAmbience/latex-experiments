@@ -1,5 +1,9 @@
 % \iffalse meta-comment
 %
+% This is a modified version of xcite to permit citations to be imported
+% into another tex file.
+%
+% Copyright 2015 Thomas Wood
 % Copyright 2011 Enrico Gregorio
 %
 % This file may be distributed and/or modified under the conditions of
@@ -28,7 +32,7 @@
 %<package>\NeedsTeXFormat{LaTeX2e}
 %<package>\ProvidesPackage{xcite}
 %<*package>
-    [2011/09/02 v1.0 eXternal Citations (EG)]
+    [2015/11/02 v1.1 Add importcitations command (TW)]
 %</package>
 %
 %<*driver>
@@ -45,10 +49,12 @@
 %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% \CheckSum{82}
+% \CheckSum{161}
 %
 % \changes{v1.00}{2011/09/02}
 %         {First version}
+% \changes{v1.1}{2015/11/02}
+%         {Addition of importcitations command}
 %
 % \GetFileInfo{xcite.dtx}
 %
@@ -57,7 +63,8 @@
 %         revised \filedate.}}
 % \author{Enrico Gregorio\thanks{%
 %   This package derives from \textsf{xr} by David Carlisle}\\
-%   {\small\texttt{Enrico dot Gregorio at univr dot it}}}
+%   {\small\texttt{Enrico dot Gregorio at univr dot it}} \and Thomas
+%   Wood}
 % \date{\filedate}
 % \maketitle
 %
@@ -91,19 +98,41 @@
 % characters can not usually be used in |\cite|, and similarly may
 % not be used in the optional argument to |\externalcitedocument|.
 %
+% The reverse action, adding citations to a document, say the
+% aforementioned |aaa.tex| which are only
+% referenced in the main document may be achieved through the use
+% of the accompanying command placed into the document body of |aaa.tex|:
+% \\[\topsep]
+% |\importcitations{main}|
+%
+% This causes all |\citation| commands appearing in |main.aux| to also
+% appear in |aaa.aux|, and hence be picked up by the BibTeX
+% processing.
+%
+% Be aware that \textsf{xcite} is incompatible with \textsf{hyperref} at
+% the present time.
+%
 % \section{Acknowledgment}
-% This package is just a straightforward modification of David
-% Carlisle's \textsf{xr} package (based on Jean-Pierre Drucbert's
-% work). The changes consisted in renaming the main command and
+% This package is just a straightforward modification of Enrico
+% Gregorio's \textsf{xcite} package (based on David Carlisle's
+% \textsf{xr} package (based on Jean-Pierre Drucbert's
+% work)).
+
+% The changes consisted in copying the package, renaming the main
+% command and substituting |\bibcite| with |\citation|; the |XC|
+% prefix of internal commands has been changed into |XCR|.
+
+% The changes consisted in renaming the main command and
 % substituting |\newlabel| with |\bibcite|; the |XR| prefix to
 % internal commands has been changed into |XC|.
 %
-% These modifications are possible because |\newlabel| and |\bibcite|
-% are almost the same command in disguise.
+% These modifications are possible because |\newlabel|, |\bibcite|,
+% and |\citation| are almost the same command in disguise.
 %
 % This package originated from a question in
 % |TeX.StackExchange.com|.\footnote{\ttfamily
-% http://tex.stackexchange.com/questions/27243/}
+% http://tex.stackexchange.com/questions/27243/} and further
+% requirements for a crazy referencing system.
 %
 % \StopEventually{}
 %
@@ -147,10 +176,10 @@
 %    \begin{macrocode}
 \def\XC@loop#1{\openin\@inputcheck#1\relax
   \ifeof\@inputcheck
-    \PackageWarning{xc}{^^JNo file #1^^JLABELS NOT IMPORTED.^^J}%
+    \PackageWarning{xc}{^^JNo file #1^^JBIBCITATIONS NOT IMPORTED.^^J}%
     \expandafter\XC@aux
   \else
-    \PackageInfo{xc}{IMPORTING LABELS FROM #1}%
+    \PackageInfo{xc}{IMPORTING BIBCITATIONS FROM #1}%
     \expandafter\XC@read\fi}
 %    \end{macrocode}
 %
@@ -180,6 +209,72 @@
   \else\expandafter\XC@read\fi}
 %    \end{macrocode}
 %
+% Extension: Import external citations into a document for referencing.
+%    \begin{macrocode}
+\newcommand\importcitations[1]{{%
+  \makeatletter
+  \XCR@next#1.aux\relax\\}}
+%    \end{macrocode}
+%
+% Process the next |aux| file in the list and remove it from the head of
+% the list of files to process.
+% Write filename to the logfile to record we've checked it.
+%    \begin{macrocode}
+\def\XCR@next#1\relax#2\\{%
+  \edef\XCR@list{#2}%
+  \XCR@loop{#1}}
+%    \end{macrocode}
+%
+% Check whether the list of |aux| files is empty.
+%    \begin{macrocode}
+\def\XCR@aux{%
+  \ifx\XCR@list\@empty\else\expandafter\XCR@explist\fi}
+%    \end{macrocode}
+%
+% Expand the list of |aux| files, and call |\XCR@next| to process the first
+% one.
+%    \begin{macrocode}
+\def\XCR@explist{\expandafter\XCR@next\XCR@list\\}
+%    \end{macrocode}
+%
+% If the |aux| file exists, loop through line by line, looking for
+% |\citation| and |\@input|. Otherwise process the next file in the
+% list.
+%    \begin{macrocode}
+\def\XCR@loop#1{\openin\@inputcheck#1\relax
+  \ifeof\@inputcheck
+    \PackageWarning{xcr}{^^JNo file #1^^JCITATIONS NOT IMPORTED.^^J}%
+    \expandafter\XCR@aux
+  \else
+    \PackageInfo{xcr}{IMPORTING CITATIONS FROM #1}%
+    \expandafter\XCR@read\fi}
+%    \end{macrocode}
+%
+% Read the next line of the aux file.
+%    \begin{macrocode}
+\def\XCR@read{%
+  \read\@inputcheck to\XCR@line
+%    \end{macrocode}
+% The |...| make sure that |\XCR@test| always has sufficient arguments.
+%    \begin{macrocode}
+  \expandafter\XCR@test\XCR@line..\XCR@}
+%    \end{macrocode}
+%
+% Look at the first token of the line.
+% If it is |\citation|, do the |\citation|. If it is |\@input|, add the
+% filename to the list of files to process. Otherwise ignore.
+% Go around the loop if not at end of file. Finally process the next
+% file in the list.
+%    \begin{macrocode}
+\long\def\XCR@test#1#2#3\XCR@{%
+  \ifx#1\citation
+    \nocite{#2}%
+  \else\ifx#1\@input
+     \edef\XCR@list{\XCR@list#2\relax}%
+  \fi\fi
+  \ifeof\@inputcheck\expandafter\XCR@aux
+  \else\expandafter\XCR@read\fi}
+%    \end{macrocode}
 %    \begin{macrocode}
 %</package>
 %    \end{macrocode}

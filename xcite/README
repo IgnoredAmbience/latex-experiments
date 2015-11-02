@@ -1,7 +1,12 @@
 The xcite lets you use citations keys used in another
 document, just like the package xr does with labels.
 
-This is version 1.0 of the package
+This is version 1.1 of the package, modified to add an
+\importcitations command.
+
+Copyright (C) 2015 by Thomas Wood
+
+Modified from the original v1.00 xcite by:
 
 Copyright (C) 2011 by Enrico Gregorio 
 <Enrico dot Gregorio at univr dot it>
