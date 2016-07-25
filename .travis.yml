@@ -5,21 +5,22 @@ sudo: false
 addons:
   apt:
     packages:
-      - texlive-latex-recommended
-      - texlive-latex-extra
-      - latex-beamer
+    - texlive-latex-recommended
+    - texlive-latex-extra
+    - latex-beamer
 
 install:
-  - mkdir bin
-  - wget http://mirrors.ctan.org/support/latexmk/latexmk.pl
-  - mv latexmk.pl bin/latexmk
-  - chmod a+x bin/latexmk
-  - export PATH=$PWD/bin:$PATH
+- mkdir bin
+- wget http://mirrors.ctan.org/support/latexmk/latexmk.pl
+- mv latexmk.pl bin/latexmk
+- chmod a+x bin/latexmk
+- export PATH=$PWD/bin:$PATH
 
 env:
-  - SUBDIR=beamer-lecture-notes
-  - SUBDIR=advanced-bibliography
+- SUBDIR=beamer-lecture-notes
+- SUBDIR=advanced-bibliography
+- SUBDIR=xcite
 
 script:
-  - cd $SUBDIR
-  - make
+- cd $SUBDIR
+- make
